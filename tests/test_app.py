@@ -95,6 +95,22 @@ class AppTests(unittest.TestCase):
             self.assertIn("Line 2, Meera", page)
             self.assertEqual([metric.value for metric in app.metric], ["2", "1", "0", "0.0%"])
 
+    def test_music_player_appears_only_when_music_exists(self):
+        with tempfile.TemporaryDirectory() as folder:
+            result = fake_result(Path(folder))
+            with mock.patch("make_drama.run_pipeline", return_value=result):
+                app = AppTest.from_file(APP, default_timeout=30).run()
+                app.button[0].click().run()
+                captions = " ".join(c.value for c in app.caption)
+                self.assertNotIn("background music", captions)
+
+                (Path(folder) / "episode_with_music.wav").write_bytes(
+                    (Path(folder) / "episode.wav").read_bytes()
+                )
+                app.button[0].click().run()
+                captions = " ".join(c.value for c in app.caption)
+                self.assertIn("background music", captions)
+
     def test_pipeline_error_is_shown_not_raised(self):
         import sarvam_client
 

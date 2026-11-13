@@ -108,6 +108,10 @@ def show_episode(episode: dict) -> None:
     st.markdown(f"### {episode['script'].title}")
     st.caption(f"{len(manifest['lines'])} lines, {minutes}m {seconds:02d}s")
     st.audio(str(episode["folder"] / manifest["episode"]))
+    with_music = episode["folder"] / "episode_with_music.wav"
+    if with_music.exists():
+        st.caption("With background music (Stable Audio 3)")
+        st.audio(str(with_music))
 
     script_tab, quality_tab = st.tabs(["Script", "Quality check"])
     with script_tab:
