@@ -1,0 +1,11 @@
+# Secrets - never commit
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Generated files (keep the folder, not the contents)
+output/*
+!output/.gitkeep
